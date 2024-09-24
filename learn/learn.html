@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Go</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        h2 {
+            color: #34495e;
+        }
+        p {
+            margin: 10px 0;
+        }
+        ul {
+            list-style-type: square;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Learn Go</h1>
+<h2>目录</h2>
+<ul>
+    <li><a href="#compilation">编译与运行</a></li>
+    <li><a href="#package">包的组织</a></li>
+    <li><a href="#standard-library">标准库</a></li>
+    <li><a href="#functions">函数与变量</a></li>
+    <li><a href="#semicolon">分号规则</a></li>
+    <li><a href="#os-package">os 包</a></li>
+</ul>
+
+<h2 id="compilation">编译与运行</h2>
+<p>go run file.go 来编译成可执行文件。</p>
+<p>go build file.go 就可以保存编译结果。</p>
+<p>到时候就可以直接 ./file 或者 file.exe 就可以运行二进制文件。</p>
+
+<h2 id="package">包的组织</h2>
+<p>通过包 package 组织。</p>
+<p>首先通过 package 表示属于哪一个包。</p>
+<p>之后再通过导入一系列包 import a ...。</p>
+<p>再之后是本程序的代码语句。</p>
+
+<h2 id="standard-library">标准库</h2>
+<p>go 的标准库提供了 100 多个包。</p>
+<p>fmt 包就是常见的，包含格式化输出，接受输入的函数。</p>
+<p>main 包特殊，定义了一个可执行的程序而不是一个库，是整个程序的入口。</p>
+
+<h2 id="functions">函数与变量</h2>
+<p>程序的函数 func。</p>
+<p>变量 var。</p>
+<p>常量 const。</p>
+<p>类型 type。</p>
+
+<h2 id="semicolon">分号规则</h2>
+<p>go 语言不需要分号！！！</p>
+<p>除非一行有多条语句。</p>
+<p>实际上编译器会将特定符号后面的换行符转换为分号。</p>
+<p>如：</p>
+<p>标识符，整数，浮点数，虚数，字符或字符串文字。</p>
+<p>关键字 break, continue, fallthrough, return 等。</p>
+<p>运算符和分隔符 ++ -- ） ] }。</p>
+<p>eg：x + y 如果再 + 之前换行 x 标识符会触发其后面的换行符转为分号导致错误。</p>
+<p>如果再 + 之后换行 + 不会影响后面的换行符不会转化为分号。</p>
+
+<h2 id="os-package">os 包</h2>
+<p>os 包以一种跨平台的方式，提供了一些与操作系统交互的函数和变量。</p>
+<p>程序的命令行参数可以使用 os.Args 获取。</p>
+<p>os.Args[0] 就是本身的名字，其他的元素是程序启动传给他的参数。</p>
+<p>那么这些参数就是 os.Args[1:len(os.Args)] 从头到尾，也可以 [1:]。</p>
+<p>变量声明的时候没有给值就默认是 0 值或者空字符串。</p>
+
+
+</body>
+</html>
