@@ -34,6 +34,7 @@
     <li><a href="#functions">函数与变量</a></li>
     <li><a href="#semicolon">分号规则</a></li>
     <li><a href="#os-package">os 包</a></li>
+    <li><a href="#for_loop">os 包</a></li>
 </ul>
 
 <h2 id="compilation">编译与运行</h2>
@@ -76,6 +77,23 @@
 <p>那么这些参数就是 os.Args[1:len(os.Args)] 从头到尾，也可以 [1:]。</p>
 <p>变量声明的时候没有给值就默认是 0 值或者空字符串。</p>
 
-
+<h2 id="for_loop">os 包</h2>
+<p>标准循环，其中的三个部分其实都可以省略</p>
+<p>
+    for init ; condition ; post {}
+</p>
+<p> 这个就相当于 while 循环 </p>
+<p> for condition {}  </p>
+<p>还有一种range的写法</p>
+<p>
+    for _,arg range os.Args[1:]{
+    这个是省略索引
+    }
+</p>
+<p>
+    for i os.Args[1:]{
+    这个是使用索引 其中i是当前索引也就是 1 
+    }
+</p>
 </body>
 </html>
