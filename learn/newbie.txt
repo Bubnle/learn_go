@@ -101,7 +101,7 @@ const (
 *解引用 &引用
 其中指针的类型  *type
 
-8.条件语句
+9.条件语句
     1) if语句
     if condition{
         语句
@@ -125,4 +125,81 @@ const (
     如果在case中 添加 fallthrough 就会强制执行下一个case
 
     4) select 语句
-    你好
+    只能用于管道操作！
+    每一个case就是一个通道操作
+    select 会监听所有指定通道的操作，一旦其中一个准备好就会执行对应的代码块
+
+    因为 select 语句是非阻塞的，它会一直等待所有的通信操作都准备就绪。如果需要提前结束 select 语句的执行，
+    可以使用 return 或者 goto 语句来达到相同的效果。
+
+10.循环语句
+    1)for循环
+      for init ; condition ; post { }
+
+      for condition { }  // 和c的while一样
+
+      for { }  // 等同于 for(;;)
+
+      for key,value := range map{ }
+
+      for key := range map {}
+
+      for _, value := range map { }
+      init : 一般为赋值表达式 eg: a:= value
+      condition : 循环控制条件 , 关系表达式 或者逻辑表达式
+      post : 赋值表达式  一般控制变量
+    2)嵌套循环
+
+    for init1 ; condition1 ; post{
+        for init2 ; condition2 ; post2{
+            code ;
+        }
+    }
+
+    3)break
+    select 最好使用return 或者goto
+    4)goto
+    goto label
+
+    label : 语句
+
+11.函数
+    1)
+    func func_name(parameter1 , ...) return_type{
+        函数体
+    }
+    2)
+    返回多个值
+    func name(parameter) (type1 , type2)
+
+    3)
+    用法:
+        i)值传递
+            func swap(a,b int) int {
+                var temp int
+
+                temp = x
+                x = y
+                y = x
+            }
+
+            swap(x,y)
+            实际上并没有交换
+        ii)引用传递
+            传递指针
+            func swap(a,b *int) {
+                var temp int
+                temp = *x
+                *x = * y
+                *y = temp
+            }
+
+            go 中没有传递&x的
+            不想c++
+            int func(int &x){
+                x = 100  这种直接修改的
+            }
+            func(a)
+
+        4)匿名函数
+        

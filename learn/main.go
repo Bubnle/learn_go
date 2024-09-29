@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 )
 
 // main 函数
@@ -29,6 +30,17 @@ func main() {
 	condition(-10)
 
 	switchUse(1)
+
+	selectUse()
+
+	sumTenLoop()
+
+	gotoUse()
+
+	a := 5
+	b := 3
+	ref(&a, &b)
+	fmt.Printf("a=%d , b =%d\n", a, b)
 }
 
 /*
@@ -68,7 +80,7 @@ func variety() {
 	fmt.Println(yy)
 	fmt.Println(pp)
 
-	var p int = 9999
+	var p = 9999
 	fmt.Println(p)
 }
 
@@ -121,4 +133,88 @@ func switchUse(a int) {
 	default:
 		fmt.Println("is not 1 or 2")
 	}
+}
+
+func selectUse() {
+	c1 := make(chan string)
+	c2 := make(chan string)
+
+	// 使用go 关键字启动一个协程，执行后面的匿名函数
+	go func() {
+		time.Sleep(time.Second * 1)
+		c1 <- "one"
+	}()
+	go func() {
+		time.Sleep(time.Second * 2)
+		c2 <- "two"
+	}()
+
+	for i := 0; i < 2; i++ {
+		select {
+		// 将c1收到的消息赋值给msg
+		case msg := <-c1:
+			fmt.Println("received", msg)
+
+		case msg := <-c2:
+
+			fmt.Println("received", msg)
+			break
+
+		}
+	}
+}
+
+func sumTenLoop() {
+	sum := 0
+	for i := 1; i <= 10; i++ {
+		sum += i
+	}
+	fmt.Println(sum)
+
+	sum = 100
+
+	for sum < 1000 {
+		sum += sum
+	}
+	fmt.Println(sum)
+
+	map1 := make(map[int]float32)
+	map1[1] = 1.0
+	map1[2] = 2.0
+	map1[3] = 3.0
+	map1[4] = 4.0
+	for key, value := range map1 {
+		fmt.Println("key:", key, "value:", value)
+	}
+
+	for key := range map1 {
+		fmt.Println("key:", key)
+	}
+
+	for _, va := range map1 {
+		fmt.Println("value:", va)
+	}
+
+}
+
+func gotoUse() {
+
+	sum := 10
+label:
+	for i := 1; i <= 10; i++ {
+		fmt.Println("i=", i)
+		sum += i
+		if sum == 16 {
+			goto label
+		}
+	}
+
+	fmt.Println(sum)
+}
+
+func ref(x *int, y *int) {
+	var temp int
+	temp = *x
+	*x = *y
+	*y = temp
 }
