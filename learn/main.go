@@ -56,6 +56,8 @@ func main() {
 	scopeOfEffectUse()
 
 	arrayUse()
+
+	pointerUse()
 }
 
 /*
@@ -340,5 +342,38 @@ func arrayUse() {
 	}
 	modify2(&temp, 10)
 
-	fmt.Println("传递指针", temp)
+	fmt.Println(`传指针`, temp)
+}
+
+func pointerUse() {
+	x := 10
+	p1 := &x
+	fmt.Println(*p1)
+
+	var p2 *int
+	p2 = &x
+	fmt.Println(*p2)
+
+	a := []int{1, 2, 3, 4, 5}
+	var ptr [3]*[]int // 每个指针是指向切片的
+	for i := 0; i < len(ptr); i++ {
+		ptr[i] = &a
+	}
+	fmt.Println("指针数组是", ptr)
+
+	fmt.Println(*ptr[0], *ptr[1], *ptr[2])
+
+	fmt.Println("以下是指向指针的指针")
+	var pp int
+	var pp1 *int
+	var pp2 **int
+
+	pp = 3000
+
+	pp1 = &pp
+	pp2 = &pp1
+
+	fmt.Println(pp)
+	fmt.Println(pp1, *pp1)
+	fmt.Println(pp2, *pp2, **pp2)
 }
