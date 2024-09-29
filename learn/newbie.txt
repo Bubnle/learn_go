@@ -211,6 +211,12 @@ const (
         func (varName varType) func_name() return_type{
             code
         }
+        eg:
+
+        func (c Circle) getArea() float32{
+            code
+        }
+
         就是为特定的类型设置的 只有那种类型可以调用
         一般来说就是结构体可以应用的
         直接就是对象.方法就可以
@@ -268,4 +274,25 @@ const (
     也就是可以修改参数！
 
 15.结构体
+    1)定义结构体
+    结构体是存储不同类型的数据的集合
+    type struct_name(这个也是结构体的数据类型) struct{
+        member1 type1
+        member2 type2 ...
+    }
+    2)声明结构体对象
+    var_name :=struct_name (type) {value1,value2,value3,..}
+
+    3)访问结构体成员
+    var.member
+
+    4)结构体成员作为函数参数
+    不会修改对象的值，只有将指针作为参数传递的时候才会改变
+
+    5)结构体指针
+    var name *struct_name
+    name = &ob
+    好处是在作为参数的时候能减少空间消耗
+
+16.切片
 
