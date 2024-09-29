@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+type Circle struct {
+	radius float32
+}
+
 // main 函数
 func main() {
 	var s, sep string
@@ -41,6 +45,17 @@ func main() {
 	b := 3
 	ref(&a, &b)
 	fmt.Printf("a=%d , b =%d\n", a, b)
+
+	showSequence()
+
+	anonymous()
+
+	c := Circle{1}
+	showArea(c)
+
+	scopeOfEffectUse()
+
+	arrayUse()
 }
 
 /*
@@ -139,7 +154,7 @@ func selectUse() {
 	c1 := make(chan string)
 	c2 := make(chan string)
 
-	// 使用go 关键字启动一个协程，执行后面的匿名函数
+	// go 关键字使用 跳到函数 //
 	go func() {
 		time.Sleep(time.Second * 1)
 		c1 <- "one"
@@ -217,4 +232,113 @@ func ref(x *int, y *int) {
 	temp = *x
 	*x = *y
 	*y = temp
+}
+
+func getSequence() func() int {
+	i := 0
+	return func() int {
+		i += 1
+		return i
+	}
+}
+
+func showSequence() {
+	nextN := getSequence()
+	fmt.Println(nextN())
+	fmt.Println(nextN())
+	fmt.Println(nextN())
+
+	nextN1 := getSequence()
+	fmt.Println(nextN1())
+
+}
+
+func anonymous() {
+	add := func(a, b int) int {
+		return a + b
+	}
+	result := add(1, 2)
+	fmt.Println("1+2=", result)
+
+	multiply := func(a, b int) int {
+		return a * b
+	}
+	product := multiply(1, 2)
+	fmt.Println("1*2=", product)
+
+	calculate := func(operation func(int, int) int, a, b int) int {
+		return operation(a, b)
+	}
+
+	sum := calculate(add, 2, 8)
+
+	fmt.Println("匿名函数的结果是", sum)
+
+	mul := calculate(multiply, 2, 8)
+
+	fmt.Println("匿名函数乘法的结果", mul)
+
+}
+
+func (c Circle) getArea() float32 {
+	return 3.14 * c.radius * c.radius
+}
+
+func showArea(c Circle) {
+	fmt.Println(c.getArea())
+}
+
+func scopeOfEffectUse() {
+	var a, b int // 这个是局部变量
+	a = 2
+	b = 2
+	add := func(a, b int) int { // 这里面的a b是函数内定义
+		return a + b
+	}
+
+	fmt.Println(add(a, b))
+}
+
+func arrayUse() {
+	var array = [5]int{1, 2, 3, 4, 5}
+	fmt.Println(array[1])
+	fmt.Println("array=", array)
+	balance := [10]string{"1", "hello"}
+	fmt.Println(balance[1])
+
+	for i := 0; i < len(array); i++ {
+		fmt.Println(array[i])
+	}
+
+	bin := [...]int{99, 88, 33, 22, 21, 111}
+	i := 1
+	for i < len(bin) {
+		fmt.Println(bin[i])
+		i++
+	}
+	// 二维
+	var n = [5][5]int{{1}, {2}, {3}, {4}}
+
+	fmt.Println(n[0][0])
+
+	modify := func(arr []int, size int) {
+		for i := 0; i < len(arr); i++ {
+			arr[i] *= 2
+		}
+	}
+
+	temp := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+	modify(temp, 10)
+
+	fmt.Println("值传递之后的", temp)
+
+	modify2 := func(arr *[]int, size int) {
+		for i := 0; i < len(*arr); i++ {
+			(*arr)[i] *= 2
+		}
+	}
+	modify2(&temp, 10)
+
+	fmt.Println("传递指针", temp)
 }
