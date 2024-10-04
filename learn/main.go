@@ -361,7 +361,7 @@ func pointerUse() {
 	}
 	fmt.Println("指针数组是", ptr)
 
-	fmt.Println(*ptr[0], *ptr[1], *ptr[2])
+	fmt.Println((*ptr[0])[0], *ptr[1], *ptr[2])
 
 	fmt.Println("以下是指向指针的指针")
 	var pp int
