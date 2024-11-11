@@ -91,7 +91,7 @@ const id1 id2  = value1 ,value2
 iota
 在 const关键字出现时将被重置为 0(const 内部的第一行之前)
 const 中每新增一行常量声明将使 iota 计数一次(iota 可理解为 const 语句块中的行索引)。
-沿用最后一个表达式
+沿用最后一个表达式！！！！！！！！！！！！
 const (
              i=1<<iota
              j=3<<iota
@@ -188,7 +188,7 @@ const (
             实际上并没有交换
         ii)引用传递
             传递指针
-            func swap(a,b *int) {
+            func swap(x,y *int) {
                 var temp int
                 temp = *x
                 *x = * y
@@ -196,7 +196,7 @@ const (
             }
 
             go 中没有传递&x的
-            不想c++
+            不像c++
             int func(int &x){
                 x = 100  这种直接修改的
             }
@@ -252,7 +252,7 @@ const (
         与c语言一样
         var name=  [row][col] type {{1,2,3,4,5}}
     5)向函数传递数组 ， 数组作为函数参数
-        go语言里面是之传递不同于c语言是指针传递！
+        go语言里面是值传递不同于c语言是指针传递！
 
         注意类型一定一直
 14.go指针
@@ -294,5 +294,56 @@ const (
     name = &ob
     好处是在作为参数的时候能减少空间消耗
 
-16.切片
+16.切片 Slice
+    就是相当于一个vector 一个动态数组
+    1) 声明
+    var id [] type
+    2)
+    可以使用make()函数来创建切片 此时可以说长度
+    var slice[]type = make([]type , len)
+    slice := make([]type , len)
+    3) 初始化切片
+    s := [] int{1,2,3}    此时len = 3 ;
+
+    s := arr[:] 是数组arr的引用
+
+    s := arr[startIndex:endIndex]
+
+    s := arr[startIndex] 从下标startIndex到endIndex-1
+
+    4)len()函数 和 cap()函数
+      len()函数就是获取当前的长度
+      cap()函数就是获取最长切片能达到多少
+    5)空切片
+    在一个切片没有初始化之前默认是nil 长度为0
+    6)切片截取
+    不包括endIndex的这个下标！！！
+    7)append()函数 和 copy()函数
+    如果想增加切片的容量,我们必须创建一个更大的切片并把原切片的内容都拷贝过来
+
+17.go语言范围range
+    使用for循环迭代 array , slice , channel , map
+    1)在数组和切片中它返回元素的索引和索引对应的值，在集合中返回key - value
+18.map集合
+    是一种无序的键值对的集合
+    通过key的索引来快速检索数据
+    遍历的时候返回的键值对是无序的!!!!!!!
+    map是引用类型的如果将map传递给一个函数，对其修改会改变底层!!!!!
+
+    1)定义map
+        map_id := make(map[keyType]ValueType , initCapacity)
+
+        m := map[string]int{
+           key : value ...
+        }
+    2)获取键值对
+        v1 := m[1]
+    3)遍历和删除
+        for k,v := range m {
+            ...
+        }
+
+        delete(id , key)
+
+20.递归函数
 

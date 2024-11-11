@@ -58,6 +58,12 @@ func main() {
 	arrayUse()
 
 	pointerUse()
+
+	SliceUse()
+
+	rangeUse()
+
+	mapUse()
 }
 
 /*
@@ -376,4 +382,110 @@ func pointerUse() {
 	fmt.Println(pp)
 	fmt.Println(pp1, *pp1)
 	fmt.Println(pp2, *pp2, **pp2)
+}
+func printSlice(x []int) {
+	fmt.Printf("len=%d cap=%d slice=%v\n", len(x), cap(x), x)
+}
+func SliceUse() {
+	arr := []int{1, 2, 3, 4, 5}
+	s := []int{1, 2, 3}
+	fmt.Println(arr)
+	fmt.Println(s)
+
+	s1 := arr[:]
+	fmt.Println(s1)
+
+	s2 := make([]int, 10)
+	fmt.Println(s2)
+
+	// 不包括2下标
+	s3 := arr[0:2]
+	fmt.Println(s3)
+	fmt.Println(len(s3), cap(s3))
+
+	n := func() {
+		var number []int
+		fmt.Println(number, len(number), cap(number))
+		if number == nil {
+			fmt.Println("this is nil")
+		}
+	}
+	n()
+
+	array := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	fmt.Println("array[1:10]", array[1:10])
+	fmt.Println("array[2:5]", array[2:5])
+	fmt.Println("array[:10]", array[:10])
+
+	appendAndCopyUse := func() {
+		var numbers []int
+		printSlice(numbers)
+		// append nil slice
+		numbers = append(numbers, 0)
+		printSlice(numbers)
+
+		numbers = append(numbers, 1, 2, 3)
+		printSlice(numbers)
+
+		numbers1 := make([]int, len(numbers), cap(numbers)*2)
+
+		copy(numbers1, numbers)
+		printSlice(numbers1)
+	}
+	appendAndCopyUse()
+}
+
+func rangeUse() {
+	arr := [5]int{1, 2, 3, 4, 5}
+	s := []int{1, 2, 3}
+	str := "Hello"
+
+	for key, value := range arr {
+		fmt.Println(key, value)
+	}
+	for _, value := range s {
+		fmt.Println("value:", value)
+	}
+	for index := range str {
+		fmt.Println("index:", index)
+	}
+	ss := "hello"
+	for i, c := range ss {
+		fmt.Printf("index: %d, char: %c\n", i, c)
+	}
+}
+
+func mapUse() {
+	//var m map[string]string
+	m := make(map[string]string)
+	m["Google"] = "谷歌"
+	m["Baidu"] = "百度"
+	m["Wiki"] = "维基"
+
+	for x := range m {
+		fmt.Println(x, "中文是:", m[x])
+	}
+
+	name, name2 := m["Google"]
+	fmt.Println(name, name2)
+
+	n1, n2 := m["China"]
+	fmt.Println(n1)
+	fmt.Println(n2)
+
+	cC := map[string]string{
+		"France": "Paris",
+		"Italy":  "Rome",
+		"Japan":  "Tokyo",
+		"India":  "New delhi",
+	}
+	for c := range cC {
+		fmt.Println(c, "首都是", cC[c])
+	}
+	delete(cC, "France")
+	fmt.Println("法国条目被删除")
+
+	for c := range cC {
+		fmt.Println(c, "首都是", cC[c])
+	}
 }
