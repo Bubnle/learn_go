@@ -346,4 +346,113 @@ const (
         delete(id , key)
 
 20.递归函数
+    有终止条件
+    自己调用自己
+
+21.语言类型转换
+    trans_type(expression)
+    和c语言的(int)a 反过来的
+
+    字符串转换就是调用"Atoi"函数！
+    需要引入包!!!!!
+    import{
+        "strconv"
+    }
+
+    返回两个值 第一个是转换后的整型值，第二个是可能发生的错误！
+22.go语言接口
+go语言提供了另一种数据类型即接口！
+将所有的具有共性的方法定义在一起！
+任何其他类型只要实现了这些方法就是实现了这个接口
+所以可以通过将接口作为参数来实现不同类型的调用，也就是实现多态
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+在 Go 中，接口中的方法需要指定参数类型和返回类型。
+接口的方法定义只是一个声明，明确接口要求实现者提供哪些方法，
+以及这些方法的参数类型和返回类型。
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+eg :
+    定义接口
+    type interface_name interface {
+        method_name1 [return_type]
+        method_name2 [return_type]
+        method_name3 [return_type]
+    }
+    定义结构体
+    type struct_name struct {
+        var
+    }
+    实现接口方法
+    func (struct_name_variable struct_name) method_name1() [return_type]{
+        code...
+    }
+    ...
+    func (struct_name_variable struct_name) method_name2() [return_type]{
+        code...
+    }
+
+
+23.续21！！！！！！！！！！！
+    !!!
+    1)接口类型转换
+        1-1 类型断言
+        用于将接口类型转换为指定类型
+        注意中间有个点！！！！！
+        value.(type)
+        value.(T)
+        1-2 类型转换 指的是接口转换成其他类型！
+        T(value) 和之前一样的
+
+24.错误处理
+go 语言里面通过内置的错误接口提供了非常简单的错误处理机制！！！
+eg:
+type error interface{
+    Error() string
+}
+我们可以在代码中通过实现接口来生成错误信息
+通常就是 errors.New("content")
+
+25.go的并发
+    25-1
+    其中有goroutines 和 channels
+    其中的goroutine 是轻量级线程， goroutine的调度是由golang运行时进行管理的
+    语法格式:
+        go 函数名(参数列表)
+        eg:
+            go function_eg(x, y, z)
+            启动一个goroutine：
+            function_eg(x, y, z)
+
+        重点当主线程结束的时候其他的协程也会停止！！！！
+    25-2 channel 通道  !!!!! 用于goroutine之间通信
+    是用来数据传输的一个数据结构
+    通道可以用于两个goroutine 之间通过一个指定类型的值来同步和通讯
+    用make函数可以创建一个channel
+    ch := make(chan int) 传递int的通道
+
+    使用 <- 操作符接收和发送数据
+    eg:
+        ch <- v 把v发送到通道ch
+
+        v:= <-ch 从ch接收数据并且把值赋给v
+    注意：默认情况下，通道是不带缓冲区的。发送端发送数据，同时必须有接收端相应的接收数据。
+
+        可以设置通道缓冲区大侠，通过make的第二个参数
+        ch := make(chan int , 100)
+        带缓冲区的通道允许发送端的数据发送和接收端的数据获取处于异步状态，就是说发送端发送的数据可以放在缓冲区里面，可以等待接收端去获取数据，而不是立刻需要接收端去获取数据。
+
+        不过由于缓冲区的大小是有限的，所以还是必须有接收端来接收数据的，否则缓冲区一满，数据发送端就无法再发送数据了。
+
+        注意：如果通道不带缓冲，发送方会阻塞直到接收方从通道中接收了值。如果通道带缓冲，发送方则会阻塞直到发送的值被拷贝到缓冲区内；如果缓冲区已满，则意味着需要等待直到某个接收方获取到一个值。接收方在有值可以接收之前会一直阻塞。
+
+    go遍历通道与关闭通道
+    通过range关键字来实现遍历读取到的数据
+    eg:
+        v, ok =:= <-ch
+        如果接收不到数据那么ok就是false 此时就可以使用close()函数来关闭
+    再次说一下select语句
+    可以使得一个goroutine 可以等待多个通信操作
+    select会阻塞直到其中的某个case可以继续执行!
+
+
+
 

@@ -3,7 +3,9 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -64,6 +66,30 @@ func main() {
 	rangeUse()
 
 	mapUse()
+
+	fmt.Println(fibonacci(10))
+
+	transform()
+
+	interfaceUse()
+
+	interfaceUse2()
+
+	transInterface()
+
+	transInterfaceUse2()
+
+	ErrorUse()
+
+	goroutineUse()
+
+	ChannelUse()
+
+	ChannelUse2()
+
+	ChannelUse3()
+
+	SelectUse()
 }
 
 /*
@@ -488,4 +514,229 @@ func mapUse() {
 	for c := range cC {
 		fmt.Println(c, "首都是", cC[c])
 	}
+}
+
+func fibonacci(a int) int {
+	if a < 2 {
+		return a
+	}
+	return fibonacci(a-1) + fibonacci(a-2)
+}
+
+func transform() {
+	a := 1.222
+	fmt.Println(int(a))
+	x := "9999"
+	fmt.Println(strconv.Atoi(x))
+	n1, n2 := strconv.Atoi("name")
+	fmt.Println(n1, n2)
+}
+
+type Phone interface {
+	call() // 定义的接口
+}
+type NokiaPhone struct{}
+
+func (nokiaPhone NokiaPhone) call() {
+	fmt.Println("I am NokiaPhone, i call you")
+}
+
+type iPhone struct {
+}
+
+func (iPhone iPhone) call() {
+	fmt.Println("I am iPhone, i call you")
+}
+func interfaceUse() {
+	var phone Phone
+	phone = new(NokiaPhone)
+	phone.call()
+	phone = new(iPhone)
+	phone.call()
+}
+
+type Shape interface {
+	area() float64
+}
+
+type Rectangle struct {
+	width, height float64
+}
+type Cir struct {
+	radius float64
+}
+
+func (r Rectangle) area() float64 {
+	return r.width * r.height
+}
+
+func (c Cir) area() float64 {
+	return c.radius * c.radius * math.Pi
+}
+
+func interfaceUse2() {
+	var shape Shape
+	shape = Rectangle{1, 1}
+	fmt.Println(shape.area())
+	shape = Cir{2}
+	fmt.Println(shape.area())
+}
+
+// 这里面的i 是一个接口
+func transInterface() {
+	var i interface{} = "Hello"
+	s, ok := i.(string)
+	if ok {
+		fmt.Println("success", s)
+	} else {
+		fmt.Println("转换失败")
+	}
+}
+
+type Writer interface {
+	Write([]byte) (int, error)
+}
+type StringWriter struct {
+	str string
+}
+
+func (sw StringWriter) Write(p []byte) (int, error) {
+	sw.str = string(p)
+	return len(p), nil
+}
+func transInterfaceUse2() {
+	// 创建一个 StringWriter 实例并赋值给 Writer 接口变量
+	var w Writer = StringWriter{}
+
+	// 将 Writer 接口类型转换为 StringWriter 类型
+	sw := w.(StringWriter)
+
+	// 修改 StringWriter 的字段
+	sw.str = "Hello, World"
+
+	// 打印 StringWriter 的字段值
+	fmt.Println(sw.str)
+}
+
+type DivideError struct {
+	dividend int
+	divider  int
+}
+
+// 实现的是error接口中的Error函数
+func (de DivideError) Error() string {
+	/// 格式化字符串
+	strFormat := `
+    Cannot proceed, the divider is zero.
+    dividend: %d
+    divider: 0
+`
+	// 这里面的%d 就是占位符
+	return fmt.Sprintf(strFormat, de.dividend)
+}
+func Divide(varDividend int, varDivider int) (result int, errorMsg string) {
+	if varDivider == 0 {
+		// 实例化 这个除法错误的结构体
+		dData := DivideError{
+			dividend: varDividend,
+			divider:  varDivider,
+		}
+		errorMsg = dData.Error()
+		return
+	} else {
+		return varDividend / varDivider, ""
+	}
+}
+
+func ErrorUse() {
+	if result, errorMsg := Divide(100, 20); errorMsg == "" {
+		fmt.Println("100/20 = ", result)
+	}
+	if _, errorMsg := Divide(100, 0); errorMsg != "" {
+		fmt.Println("!!! ", errorMsg)
+	}
+}
+
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+}
+func goroutineUse() {
+	go say("world")
+	go say("thread")
+	say("hello")
+}
+func sum(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	c <- sum // 把sum发送到通道里面
+}
+
+func ChannelUse() {
+	s := []int{7, 2, 8, -9, 4, 0}
+	c := make(chan int)
+	go sum(s[:len(s)/2], c)
+	go sum(s[len(s)/2:], c)
+	x, y := <-c, <-c
+	fmt.Println(x, y, x+y)
+}
+
+func ChannelUse2() {
+	c := make(chan int, 1)
+	c <- 1
+	fmt.Println(<-c)
+	c <- 2
+	fmt.Println(<-c)
+	c <- 3
+	// 此时就会报错
+	// c <- 4
+}
+func fibonacciNew(n int, c chan int) {
+	x, y := 0, 1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	close(c)
+}
+
+func ChannelUse3() {
+	c := make(chan int, 10)
+	go fibonacciNew(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
+	}
+}
+
+func fibonacciNew2(c, quit chan int) {
+	x, y := 0, 1
+	for {
+		select {
+		case c <- x:
+			x, y = y, x+y
+		case <-quit:
+			fmt.Println("quit")
+			return
+			// 必须加！！！
+			// 当 quit 通道接收到信号时，
+			//case <-quit 会被执行，打印 "quit" 后立即 return 退出函数。
+		}
+	}
+}
+
+func SelectUse() {
+	c := make(chan int)
+	quit := make(chan int)
+
+	go func() {
+		for i := 0; i < 10; i++ {
+			fmt.Println(<-c)
+		}
+		quit <- 0
+	}()
+	fibonacciNew2(c, quit)
 }
